@@ -31,7 +31,9 @@ const gui = {
   fullscreen: $('#fullscreen'),
   loop: $('#loop'),
   filename: $('#filename'),
-  status: $('#status')
+  status: $('#status'),
+  playLocalFiles: $('#play-local-files'),
+  localFilesInput: $('#local-files-input')
 }
 const player = new Player({
   video: $('#player'),
@@ -40,6 +42,15 @@ const player = new Player({
 
 player.remote.register(controls)
 player.gui.register(gui)
+
+gui.playLocalFiles.addEventListener('click', (e) => {
+  e.preventDefault()
+  gui.localFilesInput.click()
+})
+
+gui.localFilesInput.addEventListener('change', (e) => {
+  player.loadFiles(e.target.files)
+})
 
 player.state.on('change', (state) => {
   console.log(state)
