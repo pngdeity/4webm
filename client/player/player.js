@@ -149,6 +149,43 @@ class Player {
   getVideoElement () {
     return this._$video
   }
+
+  loadFiles (files) {
+    this._playlist.flash('Loading...')
+
+    this._webmUrls = []
+    this._filenames = []
+    const thumbnails = []
+
+    for (const file of files) {
+      this._webmUrls.push(URL.createObjectURL(file))
+      this._filenames.push(file.name)
+      thumbnails.push('')
+    }
+
+    this._playlist.gen(
+      this._filenames,
+      thumbnails,
+      'Local Files',
+      (i) => this.play(i, false)
+    )
+
+    const index = 0
+
+    document.title = 'Local Files - 4webm'
+    this._playlist.update(index)
+    this.state.set({
+      url: this._webmUrls[index],
+      title: this._filenames[index],
+      total: this._webmUrls.length,
+      index
+    })
+
+    if (this._$video.src === '' || this.state.paused) {
+      this._$video.src = this._webmUrls[index]
+      this.play(index)
+    }
+  }
 }
 
 export default Player
